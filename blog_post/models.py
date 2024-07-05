@@ -29,6 +29,8 @@ class Guestbook(models.Model):
     message = models.TextField()
     req_time = models.DateTimeField(auto_now_add = True)
         
+    # +代表升序
+    # -代表降序
     class Meta:
         ordering = ['-req_time']
    
