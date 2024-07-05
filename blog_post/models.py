@@ -17,6 +17,7 @@ class Post(models.Model):
     def __str__(self):
         return self.title
 
+
 """_summary
 Returns:
     _type_: _description_
@@ -26,10 +27,10 @@ class Guestbook(models.Model):
     email = models.CharField(max_length=100)
     phone = models.CharField(max_length=20)
     message = models.TextField()
-    time = models.DateTimeField(auto_now_add = True)
+    req_time = models.DateTimeField(auto_now_add = True)
         
     class Meta:
-        ordering = ['-time']
+        ordering = ['-req_time']
    
     def __str__(self):
         return self.name
