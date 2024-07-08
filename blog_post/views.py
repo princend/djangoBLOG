@@ -18,6 +18,7 @@ def index(requests):
 
 def showPost(requests, slug):
     try:
+        # 左邊的slug為資料庫的欄位(key),右邊的slug為django傳進來的slug參數
         post = Post.objects.get(slug=slug)
     except ObjectDoesNotExist:
         return redirect('/')

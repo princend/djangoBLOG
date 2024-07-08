@@ -26,7 +26,6 @@ urlpatterns = [
     
     # 左邊的slug的為型態,右邊的slug 為傳到view function 的變數名稱
     path("post/<slug:slug>/", showPost),
-    
     # 多行
     # path("post/<slug:slug>/<slug2:slug2>/<slug3:slug3>", showPost),
 ]
