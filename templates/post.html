@@ -23,18 +23,13 @@
         </style>
     </head>
     <body>
-        <h1>Welcome to My Blog</h1>
+        <h1>{{post.title}}</h1>
         <hr>
-        {% for post in posts %}
-        <a href="post/{{post.slug}}">
-            <p class="post_title"> {{ post.title }}</p>
-        </a>
-
-        {% comment %} <p class="post.content"> {{ post.content }}</p>
-        <p class="post.pub_date"> {{ post.pub_date }}</p> {% endcomment %}
-        {% endfor %}
+         {% comment %} <p class="post_title"> {{ post.title }}</p> {% endcomment %}
+         <p class="post.content"> {{ post.content }}</p>
+         <p class="post.pub_date"> {{ post.pub_date }}</p> 
         <hr>
-        <h3> 現在時間: {{ now }} </h3>
+        <h3> <a href="/">回首頁</a> </h3>
     </body>
 
 

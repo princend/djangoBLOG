@@ -1,19 +1,28 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from django.http import HttpResponse
 from blog_post.models import Post
 # Create your views here.
-
+from datetime import datetime
+from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 
 def index(requests):
     posts = Post.objects.all()
-    post_list = list()
-    for count, post in enumerate(posts):
-        post_list.append("<h2>#{}: {}</h2> <br><hr>".format(str(count), str(post)))
-        post_list.append("<small> {} </small> <br> <br>".format(post.content))
-    return HttpResponse(post_list)
+    # post_list = list()
+    # for count, post in enumerate(posts):
+    #     post_list.append("<h2>#{}: {}</h2> <br><hr>".format(str(count), str(post)))
+    #     post_list.append("<small> {} </small> <br> <br>".format(post.content))
+    now = datetime.now()
+    
+    return render(requests,"index.html",locals())
 
-    posts = Post.objects.all()
-    post_list = list()
-    for count, post in enumerate(posts):
-        post_list.append("#{}: {} <br><br>".format(str(count), str(post)))
-    return HttpResponse(post_list)
+
+def showPost(requests, slug):
+    try:
+        post = Post.objects.get(slug=slug)
+    except ObjectDoesNotExist:
+        return redirect('/')
+    except MultipleObjectsReturned:
+        return redirect('/')
+    
+    # return HttpResponse(slug)
+    return render(requests, "post.html", locals())
