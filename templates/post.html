@@ -2,7 +2,7 @@
     <head>
         <meta charset="utf-8">
         <title> Django CMS </title>
-        <style>
+        {% comment %} <style>
             .post_title {
                 color: blue;
                 font-family: 微軟正黑體;
@@ -20,7 +20,7 @@
                 font-family: 微軟正黑體;
                 font-size: 10pt;
             }
-        </style>
+        </style> {% endcomment %}
     </head>
     <body>
         <h1>{{post.title}}</h1>
@@ -29,7 +29,7 @@
          <p class="post.content"> {{ post.content }}</p>
          <p class="post.pub_date"> {{ post.pub_date }}</p> 
         <hr>
-        <h3> <a href="/">回首頁</a> </h3>
+        {% comment %} <h3> <a href="/">回首頁</a> </h3> {% endcomment %}
     </body>
 
 

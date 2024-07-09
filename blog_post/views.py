@@ -13,7 +13,7 @@ def index(requests):
     #     post_list.append("<small> {} </small> <br> <br>".format(post.content))
     now = datetime.now()
     
-    return render(requests,"index.html",locals())
+    return render(requests,"pages/index.html",locals())
 
 
 def showPost(requests, slug):
@@ -26,4 +26,4 @@ def showPost(requests, slug):
         return redirect('/')
     
     # return HttpResponse(slug)
-    return render(requests, "post.html", locals())
+    return render(requests, "pages/post.html", locals())

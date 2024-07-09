@@ -118,6 +118,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = "static/"
+# 部屬時候才會有功效的路徑
+STATIC_ROOT = BASE_DIR / 'public/assets'
+STATICFILES_DIRS = [
+    BASE_DIR / 'static'
+    ]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field

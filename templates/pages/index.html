@@ -1,0 +1,8 @@
+{% extends "scaffolds/base.html" %}
+{% block content %}
+    {% for post in posts %}
+        <a href="post/{{post.slug}}">
+            <p class="post_title"> {{ post.title }}</p>
+        </a>
+    {% endfor %}
+{% endblock %}
