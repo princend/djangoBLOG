@@ -87,3 +87,9 @@ local_settings.py
 
 .env
 db.sqlite3
+
+# 不追蹤 public/assets 內的任何資料
+public/assets/*
+
+# 在忽略追蹤資料夾 強制追蹤檔案
+!public/assets/.gitkeep
