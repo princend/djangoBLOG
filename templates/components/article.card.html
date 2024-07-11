@@ -13,7 +13,7 @@
                     <a href="post/{{post.slug}}"> 閱讀更多... </a>
                 {% else %}
                 {% load markdown_tag %}      
-                    {{ post.content| markdown |safe |linebreaks }}
+                    {{ post.content| markdown |safe |linebreaks }}  
                 {% endif %}
             </div>
             <div class="card-footer"> 發表時間：{{ post.pub_date }}</div> <!-- /.card-footer-->
