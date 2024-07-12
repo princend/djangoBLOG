@@ -6,6 +6,8 @@ from datetime import datetime
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from libraries.service.get591 import Get591byAPiService
 import json
+from blog_post.models import BuildInfo
+import traceback
 
 def index(requests):
     posts = Post.objects.all()
@@ -34,7 +36,29 @@ def showPost(requests, slug):
 def get591_view(request):
     service =  Get591byAPiService()
     data=  service.getInfo()
-    # qq=data["data"][0]['build_name']
+    
+    build_info_list=data["data"]
+    
+    
+    # for x in build_info_list:
+    #     addToTable(x)
+    
     # print(qq)
     text= json.dumps(data)
+    # addToTable()
     return HttpResponse(text)
+
+"""加進table裡"""
+def addToTable(build_info):
+
+    try:
+        to_added_info={}
+
+        for field in BuildInfo._meta.get_fields():
+            if(field.name!='id'):
+                to_added_info[field.name]=build_info[field.name]  
+        
+        BuildInfo.objects.create(**to_added_info)
+        
+    except Exception as Err:
+        traceback.print_exception(Err)
