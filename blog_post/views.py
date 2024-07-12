@@ -8,6 +8,7 @@ from libraries.service.get591 import Get591byAPiService
 import json
 from blog_post.models import BuildInfo
 import traceback
+import requests
 
 def index(requests):
     posts = Post.objects.all()
@@ -37,20 +38,22 @@ def get591_view(request):
     service =  Get591byAPiService()
     data=  service.getInfo()
     
-    build_info_list=data["data"]
-    
+    # build_info_list = data["data"]
+    # first_data = getFirstBuildInfoFromTable()
+    # build_name=first_data.build_name
+    # cover=first_data.cover 
+    # line_notify(build_name=build_name,cover=cover)
     
     # for x in build_info_list:
     #     addToTable(x)
     
-    # print(qq)
     text= json.dumps(data)
-    # addToTable()
+    
     return HttpResponse(text)
 
-"""加進table裡"""
-def addToTable(build_info):
 
+"""將一筆房屋資訊加進table裡"""
+def addToTable(build_info):
     try:
         to_added_info={}
 
@@ -62,3 +65,43 @@ def addToTable(build_info):
         
     except Exception as Err:
         traceback.print_exception(Err)
+        
+        
+"""
+取得buildinfo Table 的 第2筆資料
+todo 可能會改寫
+"""        
+def getFirstBuildInfoFromTable():
+   return BuildInfo.objects.get(id=2)
+
+
+# line 通知
+def line_notify(build_name,cover):
+    # token 之後要抽離到設定檔
+    token = 'uRt31oA2Uw5HiRVEjwHuI1BhlkpzEvQG8zWL03kHXyw'  # 填入你的token
+    url = 'https://notify-api.line.me/api/notify'
+    headers = {
+        'Authorization': 'Bearer ' + token
+    }
+    data = {
+        'message': build_name
+    }
+    
+    local_image_path = "downloaded_image.jpg"
+    download_image(cover, local_image_path)
+     
+    files = {
+        "imageFile": open(local_image_path, "rb")
+    }
+    
+    requests.post(url, headers=headers, data=data,files=files)
+
+        
+# 下載圖片 因為open只能用本機檔案傳遞
+def download_image(url, file_path):
+    response = requests.get(url)
+    if response.status_code == 200:
+        with open(file_path, 'wb') as file:
+            file.write(response.content)
+    else:
+        raise Exception("Failed to download image")
