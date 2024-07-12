@@ -4,6 +4,8 @@ from blog_post.models import Post
 # Create your views here.
 from datetime import datetime
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
+from libraries.service.get591 import Get591byAPiService
+import json
 
 def index(requests):
     posts = Post.objects.all()
@@ -27,3 +29,12 @@ def showPost(requests, slug):
     
     # return HttpResponse(slug)
     return render(requests, "pages/post.html", locals())
+
+
+def get591_view(request):
+    service =  Get591byAPiService()
+    data=  service.getInfo()
+    # qq=data["data"][0]['build_name']
+    # print(qq)
+    text= json.dumps(data)
+    return HttpResponse(text)
