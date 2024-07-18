@@ -124,32 +124,49 @@ from .models import HouseInfo, Photo, RentTag, Surrounding
 ##新增住屋資訊進去table
 
 def save_house_info(data):
-   with transaction.atomic():  # 使用事務確保數據一致性
+    with transaction.atomic():  # 使用事務確保數據一致性
         # 創建 Surrounding 實例
         surrounding_data = data.pop('surrounding')
         surrounding = Surrounding.objects.create(**surrounding_data)
-        photo_list=data.pop('photo_list')
-        rent_tag=data.pop('rent_tag')
         
-        # 創建 Property 實例
-        house_data = data.copy()
-        house_data['surrounding'] = surrounding
-        property = HouseInfo.objects.create(**house_data)
+        # 創建 Property 實例，不包含多對多字段
+        property_data = {
+            'title': data['title'],
+            'type': data['type'],
+            'post_id': data['post_id'],
+            'price': data['price'],
+            'price_unit': data['price_unit'],
+            'section_name': data['section_name'],
+            'street_name': data['street_name'],
+            'area': data['area'],
+            'community': data['community'],
+            'room_str': data['room_str'],
+            'is_video': data['is_video'],
+            'preferred': data['preferred'],
+            'kind': data['kind'],
+            'surrounding': surrounding  # 一對一關聯
+        }
         
-        if photo_list:
-            # 處理照片列表
-            for photo_url in photo_list:
-                photo = Photo.objects.create(url=photo_url)
-                property.photo_list.add(photo)
         
-        if rent_tag:
-            # 處理租賃標籤
-            for tag_data in rent_tag:
-                tag, created = RentTag.objects.get_or_create(id=tag_data['id'], defaults={'name': tag_data['name']})
-                property.rent_tag.add(tag)
+        property_instance, created = HouseInfo.objects.update_or_create(
+            post_id=data['post_id'],
+            defaults=property_data
+        )
+        
+        
+        # 處理照片列表
+        property_instance.photo_list.clear()
+        for photo_url in data['photo_list']:
+            photo, _ = Photo.objects.get_or_create(url=photo_url)
+            property_instance.photo_list.add(photo)
+        
+        # 處理租賃標籤
+        property_instance.rent_tag.clear()
+        for tag_data in data['rent_tag']:
+            tag, _ = RentTag.objects.get_or_create(id=tag_data['id'], defaults={'name': tag_data['name']})
+            property_instance.rent_tag.add(tag)
         
         # 保存 Property 實例
-        property.save()
-
+        property_instance.save()
 
 
