@@ -128,21 +128,25 @@ def save_house_info(data):
         # 創建 Surrounding 實例
         surrounding_data = data.pop('surrounding')
         surrounding = Surrounding.objects.create(**surrounding_data)
+        photo_list=data.pop('photo_list')
+        rent_tag=data.pop('rent_tag')
         
         # 創建 Property 實例
         house_data = data.copy()
         house_data['surrounding'] = surrounding
         property = HouseInfo.objects.create(**house_data)
         
-        # 處理照片列表
-        for photo_url in data['photo_list']:
-            photo = Photo.objects.create(url=photo_url)
-            property.photo_list.add(photo)
+        if photo_list:
+            # 處理照片列表
+            for photo_url in photo_list:
+                photo = Photo.objects.create(url=photo_url)
+                property.photo_list.add(photo)
         
-        # 處理租賃標籤
-        for tag_data in data['rent_tag']:
-            tag, created = RentTag.objects.get_or_create(id=tag_data['id'], defaults={'name': tag_data['name']})
-            property.rent_tag.add(tag)
+        if rent_tag:
+            # 處理租賃標籤
+            for tag_data in rent_tag:
+                tag, created = RentTag.objects.get_or_create(id=tag_data['id'], defaults={'name': tag_data['name']})
+                property.rent_tag.add(tag)
         
         # 保存 Property 實例
         property.save()
