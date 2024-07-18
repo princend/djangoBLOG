@@ -38,14 +38,19 @@ def get591_view(request):
     service =  Get591byAPiService()
     data=  service.getInfo()
     
-    # build_info_list = data["data"]
+    house_info_list = data["data"]
+    top_data_list=house_info_list["topData"]
+    
+    
+    # print('hello',top_data_list)
+    
     # first_data = getFirstBuildInfoFromTable()
     # build_name=first_data.build_name
     # cover=first_data.cover 
     # line_notify(build_name=build_name,cover=cover)
     
-    # for x in build_info_list:
-    #     addToTable(x)
+    for x in top_data_list:
+        save_house_info(x)
     
     text= json.dumps(data)
     
@@ -66,6 +71,9 @@ def addToTable(build_info):
     except Exception as Err:
         traceback.print_exception(Err)
         
+ 
+ 
+ 
         
 """
 取得buildinfo Table 的 第2筆資料
@@ -105,3 +113,47 @@ def download_image(url, file_path):
             file.write(response.content)
     else:
         raise Exception("Failed to download image")
+    
+    
+
+from django.db import transaction
+
+# 假設你已經在 models.py 中定義了對應的模型
+from .models import HouseInfo, Photo, RentTag, Surrounding
+
+##新增住屋資訊進去table
+
+def save_house_info(data):
+    with transaction.atomic():  # 使用事務確保數據一致性
+        # 創建 Surrounding 實例
+        surrounding_data = data.pop('surrounding')
+        surrounding = Surrounding.objects.create(**surrounding_data)
+        
+        
+        print('qqq',surrounding)
+        
+        # 創建 Property 實例
+        house_info_data = data.copy()
+        # house_info_data['surrounding'] = surrounding
+        
+        print('break1',
+              house_info_data)
+        
+        house_info = HouseInfo.objects.create(**house_info_data)
+        print('break2')
+        
+        # 處理照片列表
+        for photo_url in data['photo_list']:
+            photo = Photo.objects.create(url=photo_url)
+            house_info.photo_list.add(photo)
+        
+        # 處理租賃標籤
+        for tag_data in data['rent_tag']:
+            tag, created = RentTag.objects.get_or_create(id=tag_data['id'], defaults={'name': tag_data['name']})
+            house_info.rent_tag.add(tag)
+        
+        # 保存 Property 實例
+        house_info.save()
+
+
+

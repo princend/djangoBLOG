@@ -38,8 +38,9 @@ class Guestbook(models.Model):
         return self.name
 
 
-# 591房屋資訊
-class BuildInfo(models.Model):
+# deprecated
+# 591房屋資訊 已棄用
+class BuildInfo(models.Model): 
     hid = models.IntegerField(unique=True)
     build_name = models.CharField(max_length=255)
     cover = models.URLField(max_length=500)
@@ -65,3 +66,57 @@ class BuildInfo(models.Model):
 
     def __str__(self):
         return self.build_name
+    
+    
+
+
+class RentTag(models.Model):
+    id = models.IntegerField(primary_key=True)
+    name = models.CharField(max_length=255)
+
+class Photo(models.Model):
+    url = models.URLField(max_length=500)
+
+class Surrounding(models.Model):
+    type = models.CharField(max_length=255)
+    desc = models.CharField(max_length=255)
+    distance = models.CharField(max_length=255)
+
+#591建屋資訊
+class HouseInfo(models.Model):
+    title = models.CharField(max_length=255)
+    type = models.IntegerField()
+    post_id = models.IntegerField(unique=True)
+    price = models.CharField(max_length=255)
+    price_unit = models.CharField(max_length=255)
+    photo_list = models.ManyToManyField(Photo)
+    section_name = models.CharField(max_length=255)
+    street_name = models.CharField(max_length=255)
+    rent_tag = models.ManyToManyField(RentTag)
+    area = models.CharField(max_length=255)
+    surrounding = models.OneToOneField(Surrounding, on_delete=models.CASCADE)
+    community = models.CharField(max_length=255)
+    room_str = models.CharField(max_length=255)
+    is_video = models.BooleanField()
+    preferred = models.BooleanField()
+    kind = models.IntegerField()
+
+# Add the following if you want to create admin classes for the models
+from django.contrib import admin
+
+@admin.register(RentTag)
+class RentTagAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name')
+
+@admin.register(Photo)
+class PhotoAdmin(admin.ModelAdmin):
+    list_display = ('id', 'url')
+
+@admin.register(Surrounding)
+class SurroundingAdmin(admin.ModelAdmin):
+    list_display = ('id', 'type', 'desc', 'distance')
+
+@admin.register(HouseInfo)
+class PropertyAdmin(admin.ModelAdmin):
+    list_display = ('id', 'title', 'type', 'post_id', 'price', 'price_unit', 'section_name', 'street_name', 'area', 'community', 'room_str', 'is_video', 'preferred', 'kind')
+    filter_horizontal = ('photo_list', 'rent_tag')
