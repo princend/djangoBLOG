@@ -124,36 +124,28 @@ from .models import HouseInfo, Photo, RentTag, Surrounding
 ##新增住屋資訊進去table
 
 def save_house_info(data):
-    with transaction.atomic():  # 使用事務確保數據一致性
+   with transaction.atomic():  # 使用事務確保數據一致性
         # 創建 Surrounding 實例
         surrounding_data = data.pop('surrounding')
         surrounding = Surrounding.objects.create(**surrounding_data)
         
-        
-        print('qqq',surrounding)
-        
         # 創建 Property 實例
-        house_info_data = data.copy()
-        # house_info_data['surrounding'] = surrounding
-        
-        print('break1',
-              house_info_data)
-        
-        house_info = HouseInfo.objects.create(**house_info_data)
-        print('break2')
+        house_data = data.copy()
+        house_data['surrounding'] = surrounding
+        property = HouseInfo.objects.create(**house_data)
         
         # 處理照片列表
         for photo_url in data['photo_list']:
             photo = Photo.objects.create(url=photo_url)
-            house_info.photo_list.add(photo)
+            property.photo_list.add(photo)
         
         # 處理租賃標籤
         for tag_data in data['rent_tag']:
             tag, created = RentTag.objects.get_or_create(id=tag_data['id'], defaults={'name': tag_data['name']})
-            house_info.rent_tag.add(tag)
+            property.rent_tag.add(tag)
         
         # 保存 Property 實例
-        house_info.save()
+        property.save()
 
 
 
