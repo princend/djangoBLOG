@@ -19,7 +19,7 @@ from django.contrib import admin
 from django.urls import path
 from blog_post.views import index
 from blog_post.views import showPost
-from blog_post.views import get591_view
+from blog_post.views import get591_view,testjson
 
 
 urlpatterns = [
@@ -31,5 +31,7 @@ urlpatterns = [
     # 多行
     # path("post/<slug:slug>/<slug2:slug2>/<slug3:slug3>", showPost),
     
-    path("test",get591_view)
+    path("test",get591_view),
+    
+    path('api/test',testjson)
 ]

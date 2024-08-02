@@ -105,3 +105,8 @@ def download_image(url, file_path):
             file.write(response.content)
     else:
         raise Exception("Failed to download image")
+    
+from django.http import JsonResponse
+def testjson(requests):
+    posts = list(Post.objects.all().values())
+    return JsonResponse(posts, status=200, safe=False)
