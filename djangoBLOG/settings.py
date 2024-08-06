@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "blog_post",
-    "libraries"
+    "libraries",
+    "line_bot",
 ]
 
 MIDDLEWARE = [
@@ -149,3 +150,6 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 ## Secure cross policy
 SECURE_CROSS_ORIGIN_OPENER_POLICY = None
+
+LINE_CHANNEL_ACCESS_TOKEN="MWFZM3/0JH0FxXNJq+KFe/mB8jZb0MWQ/KvVEMEAcpnL0CNuCv/KyHPaL3VFpGM8WMKDyY/8rveVs6QdYVg73ILSpv4UPnIe/tsnWU62rDDkAOULlDQWtuNn0t88DlqfiwgEAVxHphowaubKwok5RQdB04t89/1O/w1cDnyilFU="
+LINE_CHANNEL_SECRET="47960821b51cf9688f8d7e1502af8f6c"

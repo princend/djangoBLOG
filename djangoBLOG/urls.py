@@ -20,6 +20,7 @@ from django.urls import path
 from blog_post.views import index
 from blog_post.views import showPost
 from blog_post.views import get591_view,testjson
+from line_bot.views import callback
 
 
 urlpatterns = [
@@ -33,5 +34,6 @@ urlpatterns = [
     
     path("test",get591_view),
     
-    path('api/test',testjson)
+    path('api/test',testjson),
+    path('line/',callback)
 ]
