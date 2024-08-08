@@ -10,7 +10,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 from linebot import LineBotApi, WebhookParser
 from linebot.exceptions import InvalidSignatureError, LineBotApiError
-from linebot.models import MessageEvent, TextSendMessage, TextMessage
+from linebot.models import MessageEvent, TextSendMessage, TextMessage,StickerMessage
 
 line_bot_api = LineBotApi(settings.LINE_CHANNEL_ACCESS_TOKEN)
 parser = WebhookParser(settings.LINE_CHANNEL_SECRET)
@@ -32,10 +32,24 @@ def callback(request):
        
         for event in events:
             if isinstance(event, MessageEvent):
-
+                print(event)
+                
                 if isinstance(event.message, TextMessage):
                     res_text = event.message.text
-                    line_bot_api.reply_message(event.reply_token, TextSendMessage(text = res_text))
+                    
+                    if event.message.text=='@我要報到':
+                       line_bot_api.reply_message(event.reply_token, StickerMessage(type="sticker",package_id = 789,sticker_id=10855))
+                    elif event.message.text=='@我的名牌':
+                       line_bot_api.reply_message(event.reply_token, TextSendMessage(text = res_text))
+                    elif event.message.text=='@車號登入':
+                       line_bot_api.reply_message(event.reply_token, TextSendMessage(text = res_text))
+                    else:
+                       line_bot_api.reply_message(event.reply_token, TextSendMessage(text = res_text))
         return HttpResponse()
     else:
         return HttpResponseBadRequest()
+
+
+def sendMsg(requests, uid,msg):
+    line_bot_api.push_message(uid, TextSendMessage(text = msg))
+    return HttpResponse()

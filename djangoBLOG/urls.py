@@ -20,7 +20,7 @@ from django.urls import path
 from blog_post.views import index
 from blog_post.views import showPost
 from blog_post.views import get591_view,testjson
-from line_bot.views import callback
+from line_bot.views import callback, sendMsg
 
 
 urlpatterns = [
@@ -35,5 +35,6 @@ urlpatterns = [
     path("test",get591_view),
     
     path('api/test',testjson),
-    path('line/',callback)
+    path('line/',callback),
+    path('line/push/<str:uid>/<str:msg>', sendMsg),
 ]
